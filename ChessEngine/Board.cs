@@ -553,6 +553,34 @@ public class Board {
         return fen; 
     }
 
+    public Board deepCopy()
+    {
+        // Create a new Board instance
+        Board copy = new Board();
+
+        // Deep copy arrays
+        copy.piecesBB = new ulong[piecesBB.Length][];
+        for (int i = 0; i < piecesBB.Length; i++)
+        {
+            copy.piecesBB[i] = (ulong[])piecesBB[i].Clone();
+        }
+
+        copy.sideBB = (ulong[])sideBB.Clone();
+        copy.pieceList = (int[])pieceList.Clone();
+
+        // Deep copy the GameState
+        copy.state = state.DeepCopy(); // You need to implement a DeepCopy method for GameState
+
+
+        // Deep copy the game history
+        copy.gameHistory = new List<GameState>();
+        foreach (var gameState in gameHistory)
+        {
+            copy.gameHistory.Add(gameState.DeepCopy()); // Ensure GameState has a DeepCopy method
+        }
+
+        return copy;
+    }
     internal void fromFEN(string fen )
     {
         string[] stateInfo = fen.Split(" ");
